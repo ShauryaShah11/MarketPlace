@@ -4,7 +4,7 @@ import { auth, isAdmin } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post('/add', auth, isAdmin,createCategory);
+router.post('/add',createCategory);
 router.put('/update/:id', auth, isAdmin, updateCategoryById);
 router.delete('/delete/:id', auth, isAdmin, deleteCategoryById);
 router.get('/products/:id', getProductByCategoryId);
