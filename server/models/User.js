@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
   address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address' },
   image: {
     type: String,
-    required: true
+    // required: true
   },
   token:{//for  reset password
     type:String

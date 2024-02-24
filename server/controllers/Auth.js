@@ -159,11 +159,10 @@ export const signupMobile = async (req, res) => {
 		
 		const user = await User.create({
 			name,
-			role,
 			email,
 			password: hashedPassword,
 			role: role,
-			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+			image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
 		});
 
 		return res.status(200).json({
