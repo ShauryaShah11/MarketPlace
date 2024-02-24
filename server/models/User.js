@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     required: true
   },
   products: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Product' }],
-  addresses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Address' }], // corrected spelling of "address"
+  address: { type: mongoose.Schema.Types.ObjectId, ref: 'Address' },
   image: {
     type: String,
     required: true

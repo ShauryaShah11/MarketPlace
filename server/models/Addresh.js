@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const AddreshSchema = new mongoose.Schema({
+const addressSchema = new mongoose.Schema({
     country: {
         type: String,
         required: true,
@@ -23,6 +23,6 @@ const AddreshSchema = new mongoose.Schema({
     
 });
 
-const Addresh = mongoose.model('Addresh', AddreshSchema);
+const Address = mongoose.model('Address', addressSchema);
 
-export default Addresh;
+export default Address;
