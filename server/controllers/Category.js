@@ -15,8 +15,8 @@ const IdSchema = z.string().refine((val) => {
 });
 
 export const createCategory = async (req, res) => {
-  const { name, description , tax} = req.body;
-  tax = parseFloat(tax);
+  const { name, description} = req.body;
+  const tax = parseFloat(req.body.tax);
   try {
     const newCategory = new Category({
       name,
@@ -75,7 +75,8 @@ export const getAllCategories = async (req, res) => {
 // Update category by ID
 export const updateCategoryById = async (req, res) => {
   const categoryId = req.params.id;
-  const { name, description, tax } = req.body;
+  const { name, description } = req.body;
+  const tax = parseFloat(req.body.tax);
 
   try {
     const validationIdError = validateCourseId(categoryId);
