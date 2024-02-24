@@ -21,6 +21,9 @@ const OTPSchema = mongoose.Schema({
 async function sendVerificationEmail(email, otp) {
     try {
         const MessageResponds = await mailSender(email, "Verification Email By CourseWave", otp);
+        if(!MessageResponds){
+            throw "try again later"
+        }
         console.log("Successfully sent otp:", MessageResponds);
     } catch (error) {
         console.log("Error occurs at sendVerificationEmail:", error.message);
