@@ -24,7 +24,7 @@ function Banner() {
             <div className="otherQuickOptions flex" >
               {categories?.map(category => (
                   <div className="option">
-                      <Link to={`/categories/:${category._id}`}>{category.name}</Link>
+                      <Link to={`/categories/${category._id}`} className="px-5">{category.name}</Link>
                   </div>
               ))}              
             </div>
