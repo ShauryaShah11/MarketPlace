@@ -29,8 +29,7 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     whyToSale: {
-        type: String,
-        
+        type: String,        
     },
     isSold:{
         type:Boolean,
@@ -38,17 +37,21 @@ const productSchema = new mongoose.Schema({
     } ,
     postingDate:{
         type:Date,
-        default:Date.now()
+        default:Date.now
     },
-    ownerNo:{//i mean second hand or third-hand 
+    ownerCount:{
         type:Number,
-        require:true
+        required:true
     },
     ownerId: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
         required: true,
     },
-});
+    isRemoved: {
+        type: Boolean,
+        default: false
+    },
+}, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);
 

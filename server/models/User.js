@@ -38,14 +38,11 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Custom validation function to ensure either email or mobileNo is provided but not both
 function existEmailOrMobileNo() {
-    // Check if either email or mobileNo is provided
     if (!this.email && !this.mobileNo) {
         throw new Error("Either email or mobile number is required.");
     }
 }
-//before this function stored in db first it called
 userSchema.pre("save", function(next) {
     try {
         existEmailOrMobileNo.call(this);
@@ -53,6 +50,15 @@ userSchema.pre("save", function(next) {
     } catch (error) {
         next(error);
     }
+});
+
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+        return next();
+    }
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
 });
 
 const User = mongoose.model('User', userSchema);
