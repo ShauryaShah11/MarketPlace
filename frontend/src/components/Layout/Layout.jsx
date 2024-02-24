@@ -9,7 +9,7 @@ function Layout(){
     return (
         <div>
             <Header />
-            <div className="container mx-auto mb-10">
+            <div className="container mx-auto">
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path='/login' element={<Login />}></Route>
