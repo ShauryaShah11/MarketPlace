@@ -1,7 +1,5 @@
-import { uploadFiles } from "../middlewares/upload";
-import Address from "../models/Address"; // Corrected spelling of Address
-import User from "../models/User";
-
+import Address from "../models/Address.js"; // Corrected spelling of Address
+import User from "../models/User.js";
 
 export const updateUserDetail = async (req, res) => {
     try {

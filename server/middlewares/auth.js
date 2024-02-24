@@ -7,7 +7,6 @@ dotenv.config();
 //auth
 export const auth = async (req, res, next) => {
     try {
-
         //extract token
         const token = req.cookies.token
             || req.body.token
@@ -50,7 +49,6 @@ export const auth = async (req, res, next) => {
         });
     }
 }
-
 
 //isAdmin
 export const isAdmin = async (req, res, next) => {
