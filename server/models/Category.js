@@ -15,7 +15,14 @@ const CategorySchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    products: [{product: mongoose.Schema.Types.ObjectId, ref: 'Product'}]
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
+    isRemoved: {
+        type: Boolean,
+        default: false
+    },
 }, { timestamps: true });
 
 CategorySchema.plugin(slug, { tmpl: '<%=name%>' });

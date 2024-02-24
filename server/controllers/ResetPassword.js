@@ -1,4 +1,4 @@
-import User from "../models/User,js";
+import User from "../models/User.js";
 import mailSender from "../utils/mailSender.js";
 import bcrypt from "bcrypt";
 
