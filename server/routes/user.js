@@ -1,4 +1,5 @@
 import  express from "express"
+
 import { login , changePassword,sendotp,signupMobile, signupWithemail } from "../controllers/Auth";
 import { updateDisplayPicture,updateUserDetail } from "../controllers/User";
 
@@ -29,3 +30,5 @@ router.put("/updateDisplayPicture", auth, updateDisplayPicture)
 
 //user's name,address update
 router.put("/updateUserDetail", auth,updateUserDetail )
+
+export default router;  
