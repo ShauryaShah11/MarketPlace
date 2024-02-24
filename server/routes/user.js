@@ -1,5 +1,6 @@
 import  express from "express"
 import { login , changePassword,sendotp,signupMobile, signupWithemail } from "../controllers/Auth";
+import { updateDisplayPicture,updateUserDetail } from "../controllers/User";
 
 const router = express.Router();
 // Route for user login
@@ -22,3 +23,9 @@ router.post("/reset-password-token", resetPasswordToken)
 
 // Route for resetting user's password after verification
 router.post("/reset-password", resetPassword)
+
+//user's image update/upload
+router.put("/updateDisplayPicture", auth, updateDisplayPicture)
+
+//user's name,address update
+router.put("/updateUserDetail", auth,updateUserDetail )
