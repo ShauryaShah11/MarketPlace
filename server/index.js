@@ -1,11 +1,14 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import cors from "cors"; //use to entertaint frontend
+import cors from "cors"; 
 import dotenv from "dotenv";
+import { connectDb } from "./config/db";
 const app = express();
 dotenv.config();
 
-//middleware to pass json request body
+const PORT = process.env.PORT || 5000;
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
@@ -15,10 +18,11 @@ app.use(
     })
 );
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`at ${PORT}`);
-});
+app.use('/api/users', userRoutes);
+app.use('/api/categories', categoryRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/products', productRoutes);
 
 app.get("/", (req, res) => {
     return res.json({
@@ -26,3 +30,15 @@ app.get("/", (req, res) => {
         message: "market-place server is running up and running...",
     });
 });
+
+app.listen(PORT, () => {
+    connectDb();
+    console.log(`at ${PORT}`);
+});
+
+app.get('/',(err, req, res, next) => {
+    console.error(err);
+    return res.status(500).json({
+      error: 'Internal server error'
+    })
+})
