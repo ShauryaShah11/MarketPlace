@@ -274,7 +274,7 @@ export const sendotp = async (req, res) => {
 			if (error.status == 429) {
 				return res.status(428).json({ status: false, message: "max attepemt reach" })
 			}
-			console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", error)
+			console.log("eee", error)
 			return res.status(300).json({ status: false })
 		}
 

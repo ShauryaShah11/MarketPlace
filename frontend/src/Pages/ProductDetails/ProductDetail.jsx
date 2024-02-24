@@ -4,7 +4,7 @@ import 'swiper/css';
 import 'swiper/swiper-bundle.css';
 import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
 import { IoShareSocialOutline } from "react-icons/io5";
-import frame from '../assets/frame.png'
+// import frame from '../assets/frame.png'
 function ProductDetail() {
     const bigImageRef = useRef(null);
     const [swiperHeight, setSwiperHeight] = useState(0);
