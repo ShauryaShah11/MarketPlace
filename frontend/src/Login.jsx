@@ -1,24 +1,42 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
-
+import {handleloginwithemail} from './Services/Register'
+import Swal from 'sweetalert2';
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      switch (e.target.name) {
-        case "email":
-          document?.getElementById("password")?.focus();
-          break;
-        case "password":
-          document?.getElementById("password")?.blur();
-          break;
-        default:
-          break;
+  const handleKeyPress = async(e) => {
+    try {
+           
+      const data = { email: email,
+                 password:password
+      }; // Create data object with email field
+  const order = await handleloginwithemail(data);
+      if(order){
+          Swal.fire({
+              title: "Login Successfully",
+              
+              icon: "success" 
+            }).then(()=>{
+              localStorage.setItem("user",order.user)
+              window.location.href="/"
+            })
       }
-    }
+      else{
+        Swal.fire({
+          title: "The Internet?",
+          text: "That thing is still around?",
+          icon: "question"
+        });
+      }
+    console.log(order)
+      
+      
+  } catch (error) {
+      console.error('Error fetching data:', error);
+  }
   };
 
   return (

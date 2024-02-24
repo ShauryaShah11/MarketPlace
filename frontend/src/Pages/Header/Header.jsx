@@ -78,7 +78,7 @@ const Home = () => {
     //   )
       }
       
-      <Link to="/create">
+      <Link to="/login">
     
       <div  className=' flex m-30' style={{marginLeft:"1px"}}>
 

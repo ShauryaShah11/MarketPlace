@@ -1,17 +1,21 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Register from "./Assets/picture/register.jpg";
-
+import {handleotpwithemail} from './Services/Register'
+import {handlesignupwithemail} from './Services/Register'
+import Swal from 'sweetalert2';
 export default function Login() {
     const [name, setname] = useState('');
     const [mobile, setmobile] = useState('');
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmpass, setConfirmPassword] = useState("");
-    const [role, setRole] = useState("Customer");
+    const [role, setRole] = useState("customer");
     const [showOTPField, setShowOTPField] = useState(false); // State to control OTP field visibility
-    const [otp, setOTP] = useState(""); // State to store OTP value
+    const [otp, setOTP] = useState("");
+    const [sendotp,setotp] =useState("");
+    // const [] =useState(''); // State to store OTP value
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
@@ -31,17 +35,73 @@ export default function Login() {
     const handleRoleChange = (e) => {
         setRole(e.target.value);
     };
+    const data ={
+        email : email
+    }
+   
+   
+    const handleSendOTP = async() => {
+       
+        try {
+           
+            const data = { email: email }; // Create data object with email field
+        const order = await handleotpwithemail(data);
+            if(order){
+                Swal.fire({
+                    title: "OTP Sended Successfully",
+                    
+                    icon: "success" 
+                  })
+            }
+          console.log(order)
+            
+            
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        
 
-    const handleSendOTP = () => {
-        // You can implement OTP sending logic here
-        console.log("entered otp")
-        setShowOTPField(true); // Show OTP field when OTP is sent
+        setShowOTPField(true); 
     };
 
-    const handleRegister = () => {
-        // You can implement registration logic here
-        // For demo purposes, let's assume registration is successful
-        alert("Registration Successful!");
+    const handleRegister = async(e) => {
+
+        const inf ={
+            name : name,
+            mobileNo:mobile,
+            password:password,
+            confirmPassword :confirmpass,
+            role :role,
+            otp:otp,
+            email:email,
+        }
+        
+        try {
+           
+            const user = await handlesignupwithemail(inf);
+            if(user){
+                Swal.fire({
+                    title: "Signup successfully",
+                    
+                    icon: "success" 
+                  }).then(()=>[
+                  
+                    window.location.href="/"
+                  ]);
+            }
+            else{
+                Swal.fire({
+                    title: "The Internet?",
+                    text: "That thing is still around?",
+                    icon: "question"
+                  });
+            }
+            
+            
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+        // alert("Registration Successful!");
     };
 
     return (
@@ -66,6 +126,7 @@ export default function Login() {
                             placeholder="Name"
                             value={name}
                             onChange={(ev) => setname(ev.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-1">
@@ -82,6 +143,7 @@ export default function Login() {
                             placeholder="E-mail Address"
                             value={email}
                             onChange={(ev) => setEmail(ev.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-1">
@@ -98,6 +160,7 @@ export default function Login() {
                             placeholder="password"
                             value={password}
                             onChange={(ev) => setPassword(ev.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-1">
@@ -114,6 +177,7 @@ export default function Login() {
                             style={{ border: "2px solid black" }}
                             value={confirmpass}
                             onChange={(ev) => setConfirmPassword(ev.target.value)}
+                            required
                         />
                     </div>
                     <div>
@@ -130,6 +194,7 @@ export default function Login() {
                             value={mobile}
                             style={{ border: "2px solid black" }}
                             onChange={(ev) => setmobile(ev.target.value)}
+                            required
                         />
                     </div>
                     <div className="mb-1">
@@ -145,8 +210,8 @@ export default function Login() {
                             onChange={handleRoleChange}
                             style={{ border: "2px solid black" }}
                         >
-                            <option value="Customer">Customer</option>
-                            <option value="Admin">Admin</option>
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
                         </select>
                     </div>
                     {showOTPField ? (

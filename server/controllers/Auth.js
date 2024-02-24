@@ -7,9 +7,7 @@ import jwt from "jsonwebtoken"
 import { passwordUpdated } from "../templates/passwordUpdate.js"
 import { mobileOtpSend } from "../utils/mobileOtpSend.js";
 import { verifyOtp } from "../utils/mobileOtpSend.js";
-// import {verifyOtp}  from "../utils/mobileOtp.js";
 
-// Signup Controller for Registering User
 export const signupMobile = async (req, res) => {
 
 	try {
@@ -35,11 +33,11 @@ export const signupMobile = async (req, res) => {
 				message: "All Fields are required",
 			});
 		}
-		const validationOtp=verifyOtp(mobileNo,otp);
-		if(validationOtp.valid==false){
+		const validationOtp = verifyOtp(mobileNo, otp);
+		if (validationOtp.valid == false) {
 			return res.status(500).json({
-				success:false,
-			    message:"otp invalid"
+				success: false,
+				message: "otp invalid"
 			})
 		}
 		// Check if password and confirm password match
@@ -60,10 +58,10 @@ export const signupMobile = async (req, res) => {
 			});
 		}
 		//hasing the password
-		const hashedPassword = await bcrypt.hash(password, 10);
+		// const hashedPassword = await bcrypt.hash(password, 10);
 		// console.log("here working")
 
-		
+
 		const user = await User.create({
 			name,
 			role,
@@ -90,15 +88,17 @@ export const signupMobile = async (req, res) => {
 }
 
 
- export const  signupWithemail = async (req, res) => {
+export const signupWithemail = async (req, res) => {
 	try {
 		// Destructure fields from the request body
+		console.log(req.body)
 		const {
 			name,
 			email,
 			password,
 			confirmPassword,
 			role,
+			mobileNo,
 			otp,
 		} = req.body;
 		// Check if All Details are there or not
@@ -108,6 +108,7 @@ export const signupMobile = async (req, res) => {
 			!password ||
 			!confirmPassword ||
 			!otp
+
 		) {
 			return res.status(403).send({
 				success: false,
@@ -134,7 +135,7 @@ export const signupMobile = async (req, res) => {
 
 		// Find the most recent OTP for the email
 		const response = await OTP.find({ email }).sort({ createdAt: -1 }).limit(1);
-		
+
 		if (response.length === 0) {
 			// OTP not found for the email
 			return res.status(400).json({
@@ -151,19 +152,21 @@ export const signupMobile = async (req, res) => {
 
 		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10);
+		console.log(hashedPassword);
 
 		// Create the user
 		let approved = "";
 		approved === "Instructor" ? (approved = false) : (approved = true);
 
-		
+
 		const user = await User.create({
 			name,
 			role,
 			email,
+			mobileNo,
 			password: hashedPassword,
 			role: role,
-			image: `https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`,
+			image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
 		});
 
 		return res.status(200).json({
@@ -176,46 +179,55 @@ export const signupMobile = async (req, res) => {
 		return res.status(500).json({
 			success: false,
 			message: "User cannot be registered. Please try again.",
+
 		});
 	}
 };
 
 
 // Login controller for authenticating users
+// Login controller for authenticating users
 export const login = async (req, res) => {
 	try {
 		// Get mobileNo and password from request body
-		let { mobileNo, password } = req.body;
+		let { mobileNo, email, password } = req.body;
 		mobileNo = "+" + mobileNo;
 		// Check if email or password is missing
-		if (!mobileNo || !password) {
+		if ((!mobileNo && !email) || !password) {
 			// Return 400 Bad Request status code with error message
 			return res.status(400).json({
 				success: false,
-				message: `Please Fill up All the Required Fields`,
+				message: "Please Fill up All the Required Fields",
 			});
 		}
+		console.log(email)
+		let user;
+		// Find user with provided mobileNo
+		if (mobileNo)
+			user = await User.findOne({ mobileNo })
 
 		// Find user with provided mobileNo
-		const user = await User.findOne({ mobileNo }).populate("profile").exec();
-		// If user not found with provided mobileNo
-		if (!user) {
-			// Return 401 Unauthorized status code with error message
-			return res.status(401).json({
-				success: false,
-				message: `User is not Registered with Us Please SignUp to Continue`,
-			});
-		}
-
-		// Generate JWT token and Compare Password
-		if (await bcrypt.compare(password, user.password)) {
-			const token = jwt.sign(
+		// else if (email && !user)
+			user = await User.findOne({ email })
+			// If user not found with provided mobileNo
+			if (!user) {
+				// Return 401 Unauthorized status code with error message
+				return res.status(401).json({
+					success: false,
+					message: "User is not Registered with Us Please SignUp to Continue",
+				});
+			}
+			
+			// Generate JWT token and Compare Password
+			if (await bcrypt.compare(password, user.password)) {
+				// console.log(user)
+				const token = jwt.sign(
 				{ mobileNo: user.mobileNo, id: user._id, role: user.role },
 				process.env.JWT_SECRET,
 				{
 					expiresIn: "24h",
 				}
-			);
+				);
 
 			// Save token to user document in database
 			user.token = token;
@@ -230,12 +242,13 @@ export const login = async (req, res) => {
 				success: true,
 				token,
 				user,
-				message: `User Login Success`,
+				message: "User Login Success",
 			});
 		} else {
+			// console.log(error)
 			return res.status(401).json({
 				success: false,
-				message: `Password is incorrect`,
+				message: "Password is incorrect",
 			});
 		}
 	} catch (error) {
@@ -243,7 +256,7 @@ export const login = async (req, res) => {
 		// Return 500 Internal Server Error status code with error message
 		return res.status(500).json({
 			success: false,
-			message: `Login Failure Please Try Again`,
+			message: "Login Failure Please Try Again",
 		});
 	}
 };
@@ -304,8 +317,7 @@ export const sendotpEmail = async (req, res) => {
 	try {
 		const { email } = req.body;
 
-		// Check if user is already present
-		// Find user with provided email
+
 		const checkUserPresent = await User.findOne({ email });
 		// to be used in case of signup
 
@@ -337,7 +349,7 @@ export const sendotpEmail = async (req, res) => {
 		// const otpBody = await OTP.create(otpPayload);
 		const otpBody = new OTP(otpPayload);
 		await otpBody.save();
-		
+
 		// result = await OTP.findOne({ otp: otp });
 		// if(result)
 		// console.log("OTP Body", otpBody);
@@ -349,7 +361,7 @@ export const sendotpEmail = async (req, res) => {
 			otp,
 		});
 	} catch (error) {
-		console.log("error at send otp function: " ,error.message);
+		console.log("error at send otp function: ", error.message);
 		return res.status(500).json({ success: false, error: error.message });
 	}
 };
