@@ -1,7 +1,7 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
-import Register from "./Assets/picture/register.jpg";
+import Register from "../Assets/picture/register.jpg";
 
 export default function Login() {
     const [name, setname] = useState('');

@@ -6,12 +6,12 @@ import SellButton  from '../../Assets/SellButton'
 import SellButtonPlus from '../../Assets/SellButtonPlus'
 import { Link } from 'react-router-dom'
 import './Header.css'
-const Home = () => {
+const Header = () => {
   return (
     <div className="headerParentDiv">
     <div className="headerChildDiv">
       <div className="brandName">
-        <OlxLogo></OlxLogo>
+        <Link to={'/'}><OlxLogo></OlxLogo></Link>
       </div>
 
       <div className="placeSearch" style={{width:"800px",marginLeft:"50px"}}>
@@ -21,27 +21,6 @@ const Home = () => {
         // value={wordEntered}
         // onChange={handleFilter}
       />
-      {
-    //   filteredData.length === 0 ? (
-    //     <div onClick={handleEmptyClick}> <SearchIcon /> </div>
-    //    ) : (
-    //      <div id="clearBtn"  onClick={clearInput} > <Arrow></Arrow></div>
-    //    )}
-    //     {filteredData.length !== 0 && (
-    //   <div className="dataResult-header">
-    //      {
-    //     //  filteredData.slice(0, 15).map((value, key) => {
-    //     //   return (
-    //     //     <div key={key} className="dataItem-header" onClick={()=>handleSelectedSearch(value)}>
-    //     //       {/* <p>{value.name} </p> */}
-    //     //     </div>
-    //     //   );
-    //     // })
-    // }
-    //   </div>
-    // )
-    }
-       
       </div>
       <div className="productSearch">
         {/* <Search /> */}
@@ -57,28 +36,8 @@ const Home = () => {
         </div>
      
       </Link>
-      </div>
-      <div className="loginPage">
-        {
-        // user ? (
-        //   user.displayName
-        // ) : (
-        //   <Link to="/login">
-        //     <span>Login</span>
-        //   </Link>
-        // )
-        }
-        <hr />
-      </div>
-      {
-    //   user && (
-    //     <span  className="logout-span">
-    //       Logout
-    //     </span>
-    //   )
-      }
-      
-      <Link to="/create">
+      </div>      
+      <Link to="/login">
     
       <div  className=' flex m-30' style={{marginLeft:"1px"}}>
 
@@ -92,4 +51,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Header;
