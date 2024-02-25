@@ -1,289 +1,187 @@
-import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { HiOutlineCurrencyRupee } from "react-icons/hi";
-import { MdNavigateNext } from "react-icons/md";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { toast } from "react-hot-toast"
-import IconBtn from "../../IconBtn";
-// import Upload from "../Upload";
-import { stepSelector, productSelector, editProductSelector } from "../../../store/product";
-import { productCategoriesAtom, productCategoriesSelector } from "../../../store/productCategory"
-import { loadingSelector, tokenSelector } from "../../../store/auth"
-import { addProductDetails } from "../../../Services/functions/product";
-import ChipInput from "./ChipInput";
+import { useEffect, useState } from "react";
+import { addProductDetails } from "../../../services/functions/product";
+import Loader from "../../Loader";
+import { useRecoilState } from "recoil";
+import { productCategoriesAtom } from "../../../store/productCategory";
+import { fetchCategories } from "../../../services/apiService";
 
+function ProductInformationForm(){
+  const [formData, setFormData] = useState({
+    name: "",
+    brand: "",
+    price: "",
+    description: "",
+    ownerCount: "",
+    whyToSale: "",
+    categoryId: "",
+  });
+  const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useRecoilState(productCategoriesAtom);
 
-export default function ProductInformationForm() {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    formState: { errors },
-  } = useForm();
-  const setProductCategories = useSetRecoilState(productCategoriesAtom);
-  // Example of setting new values
-  const newCategories = [{
-    name: "Electronics",
-    description: "Description for Category 1",
-    tax: 10, // Example tax value
-  },
-  {
-    name: "Category 2",
-    description: "Description for Category 2",
-    tax: 15, // Example tax value
-  },
-  {
-    name: "Category 3",
-    description: "Description for Category 3",
-    tax: 20, // Example tax value
-  },];
   useEffect(() => {
-    setProductCategories(newCategories);
+    const fetchCategoriesData = async () => {
+      try {
+          const response = await fetchCategories();
+          setCategories(response);
+      } catch (error) {
+          console.error('Error fetching categories:', error);
+      }
+    };
+    fetchCategoriesData();
   }, [])
 
-  const [product, setProduct] = useRecoilState(productSelector);
-  const [step, setStep] = useRecoilState(stepSelector);
-  const [editProduct, setEditProduct] = useRecoilState(editProductSelector);
-  const [loading, setLoading] = useRecoilState(loadingSelector);
-  const productCategories = useRecoilValue(productCategoriesSelector);
-  const token = useRecoilValue(tokenSelector);
-
-  useEffect(() => {
-    // Populate form fields if in edit mode
-    if (editProduct) {
-      setValue("name", product.name);
-      setValue("brand", product.brand);
-      setValue("price", product.price);
-      setValue("description", product.description);
-      setValue("tax", product.tax);
-      setValue("images", product.images);
-      setValue("category", product.category);
-      setValue("whyToSale", product.whyToSale);
-      setValue("ownerCount", product.ownerCount);
-    }
-  }, [product, editProduct, setValue]);
-
-  //   handle next button click
-
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-    formData.append("name", data.name);
-    formData.append("brand", data.brand);
-    formData.append("price", data.price);
-    formData.append("description", data.description);
-    formData.append("tax", data.tax);
-    formData.append("file", data.images);
-    formData.append("tags", data.productTags);
-    formData.append("category", data.category);
-    formData.append("whyToSale", data.whyToSale);
-    formData.append("ownerCount", data.ownerCount);
-
-    setLoading(true);
-    let result = null;
-    if (editProduct) {
-      formData.append("productId", product._id);
-      // result = await editProductDetails(formData, token);
-    } else {
-      result = await addProductDetails(formData, token);
-    }
-    setLoading(false);
-
-    if (result) {
-      setStep(2);
-      setProduct(result);
-    } else {
-      toast.error("Failed to save the product details.");
-    }
+  const changeHandler = (e) => {
+    setFormData((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
   };
 
+  const imageChangeHandler = (e) => {
+    // Convert FileList to Array
+    const selectedImages = Array.from(e.target.files);
+    setImages(selectedImages);
+  };
+
+  const submitHandler = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const data = new FormData();
+    Object.keys(formData).forEach((key) => {
+        data.append(key, formData[key]);
+    });
+    images.forEach((image) => {
+        data.append('file', image); // Ensure that the field name matches what Multer expects
+    });
+
+    try {
+        await addProductDetails(data);
+        setLoading(false);
+    } catch (error) {
+        console.error('Error uploading product details:', error);
+        setLoading(false);
+    }
+};
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-8 rounded-md border-[1px] bg-richblack-300 p-6"
-    >
-      {/* Name */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="name">
-          Name <sup className="text-pink-200">*</sup>
-        </label>
-        <input
-          id="name"
-          placeholder="Enter Product Name"
-          {...register("name", { required: true })}
-          className="form-style w-full"
-        />
-        {errors.name && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Name is required
-          </span>
-        )}
-      </div>
-      {/* Brand */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="brand">
-          Brand
-        </label>
-        <input id="brand" {...register("brand")} className="form-style w-full" />
-      </div>
-      {/* Price */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="price">
-          Price <sup className="text-pink-200">*</sup>
-        </label>
-        <div className="relative">
-          <input
-            id="price"
-            type="number"
-            placeholder="Enter Price"
-            {...register("price", { required: true })}
-            className="form-style w-full !pl-12"
-          />
-          <HiOutlineCurrencyRupee className="absolute left-3 top-1/2 inline-block -translate-y-1/2 text-2xl text-richblack-400" />
-        </div>
-        {errors.price && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Price is required
-          </span>
-        )}
-      </div>
-      {/* Description */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="description">
-          Description <sup className="text-pink-200">*</sup>
-        </label>
-        <textarea
-          id="description"
-          placeholder="Enter Description"
-          {...register("description", { required: true })}
-          className="form-style resize-x-none min-h-[130px] w-full"
-        />
-        {errors.description && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Description is required
-          </span>
-        )}
-      </div>
-      {/* tages */}
-      <ChipInput
-        label="Tags"
-        name="productTags"
-        placeholder="Enter Tags and press Enter"
-        register={register}
-        errors={errors}
-        setValue={setValue}
-        getValues={getValues}
-      />
-      {/* Tax */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="tax">
-          Tax <sup className="text-pink-200">*</sup>
-        </label>
-        <input
-          id="tax"
-          type="number"
-          placeholder="Enter Tax"
-          {...register("tax", { required: true })}
-          className="form-style w-full"
-        />
-        {errors.tax && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Tax is required
-          </span>
-        )}
-      </div>
-      {/* Images */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="images">
-          Images <sup className="text-pink-200">*</sup>
-        </label>
-        <input
-          id="images"
-          type="file"
-          {...register("images", { required: true })}
-          multiple
-          className="form-style w-full"
-        />
-        {errors.images && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Images are required
-          </span>
-        )}
-      </div>
-      {/* Category */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-500" htmlFor="category">
-          Category <sup className="text-pink-200">*</sup>
-        </label>
-        <select
-          id="category"
-          {...register("category", { required: true })}
-          className="form-style w-full text-black"
-        >
-          <option value="" disabled>
-            Choose a Category
-          </option>
-          {!loading &&
-            productCategories?.map((category, indx) => (
-
-              <option key={indx} value={category?._id}>
-                {category?.name}
-              </option>
-            ))}
-        </select>
-        {errors.category && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Category is required
-          </span>
-        )}
-      </div>
-      {/* Why to Sale */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="whyToSale">
-          Why to Sale
-        </label>
-        <textarea
-          id="whyToSale"
-          placeholder="Enter Reason to Sale"
-          {...register("whyToSale")}
-          className="form-style resize-x-none min-h-[130px] w-full"
-        />
-      </div>
-      {/* Owner Count */}
-      <div className="flex flex-col space-y-2">
-        <label className="text-sm text-richblack-5" htmlFor="ownerCount">
-          Owner Count <sup className="text-pink-200">*</sup>
-        </label>
-        <input
-          id="ownerCount"
-          type="number"
-          placeholder="Enter Owner Count"
-          {...register("ownerCount", { required: true })}
-          className="form-style w-full"
-        />
-        {errors.ownerCount && (
-          <span className="ml-2 text-xs tracking-wide text-pink-200">
-            Owner Count is required
-          </span>
-        )}
-      </div>
-
-      {/* Next Button */}
-      <div className="flex justify-end gap-x-2">
-        {editProduct && (
-          <button
-            onClick={() => setStep(2)}
-            disabled={loading}
-            className={`flex cursor-pointer items-center gap-x-2 rounded-md bg-richblack-300 py-[8px] px-[20px] font-semibold text-richblack-900`}
+    <div className="flex flex-col justify-center items-center m-20">
+      <div className="text-3xl mb-6 text-center font-bold">Add Product</div>
+      <div className="bg-white rounded-lg shadow-md p-8 bg-gray">
+        <form onSubmit={submitHandler} >
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 justify-center items-center bg-white">
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Name</label>
+              <div className="relative w-full">
+                <input 
+                  type='text'
+                  name='name' 
+                  placeholder='Enter product name' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Brand</label>
+              <div className="relative w-full">
+                <input 
+                  type='text'
+                  name='brand' 
+                  placeholder='Enter product brand' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Price</label>
+              <div className="relative w-full">
+                <input 
+                  type='number'
+                  name='price' 
+                  placeholder='Enter product price' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Description</label>
+              <div className="relative w-full">
+                <textarea 
+                  name='description' 
+                  placeholder='Enter product description' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Owner Count</label>
+              <div className="relative w-full">
+                <input 
+                  type='number'
+                  name='ownerCount' 
+                  placeholder='Enter owner count' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Why to Sale</label>
+              <div className="relative w-full">
+                <textarea 
+                  name='whyToSale' 
+                  placeholder='Enter reason to sale' 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Category</label>
+              <div className="relative w-full">
+                <select 
+                  name="categoryId" 
+                  onChange={changeHandler}
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg"
+                >
+                  <option value="">Select category</option>
+                  {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="mb-4 flex flex-col items-start">
+              <label className="mb-1 capitalize text-gray-600">Images</label>
+              <div className="relative w-full">
+                <input 
+                  type='file'
+                  name='images'
+                  onChange={imageChangeHandler}
+                  multiple
+                  className="w-full px-3 py-2 text-gray-900 rounded border border-gray-300 focus:outline-none focus:border-blue-500 text-lg" 
+                />
+              </div>
+            </div>
+          </div>
+          <button 
+            type="submit"
+            className="w-full py-2 px-3 text-white rounded-lg bg-blue-500 shadow-lg hover:bg-blue-600 focus:outline-none mt-4"
           >
-            Continue Without Saving
+            Add Product
           </button>
-        )}
-        <IconBtn disabled={loading} text={!editProduct ? "Next" : "Save Changes"}>
-          <MdNavigateNext />
-        </IconBtn>
+          <div className="mt-5">
+            <Loader color="#00BFFF" loading={loading} size={10}/>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }
+
+export default ProductInformationForm;

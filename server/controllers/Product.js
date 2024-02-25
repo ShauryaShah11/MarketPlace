@@ -48,12 +48,13 @@ export const addProduct = async (req, res) => {
             category:categoryId,
             whyToSale,
             ownerCount,
-            ownerId:req.user.id,
+            ownerId: req.user._id,
             images: images,
             postingDate: Date.now()
         })
         const validateProduct = productSchema.safeParse(newProduct);
         if(!validateProduct.success){
+            console.log(validateProduct.error.errors)
             return res.status(400).json({
                 error: 'Invalid product format',
                 details: validateProduct.error.errors
