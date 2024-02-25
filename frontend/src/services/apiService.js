@@ -1,8 +1,7 @@
 import { toast } from "react-hot-toast"
 import { apiConnector } from "./apiConnector";
 
-
-const API_URL = "";
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const fetchCategories = async () => {
     try {
