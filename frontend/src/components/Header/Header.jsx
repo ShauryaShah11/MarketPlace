@@ -1,16 +1,12 @@
 import React from 'react'
 import OlxLogo from '../../Assets/OlxLogo'
-import SearchIcon from '../../Assets/SearchIcon'
-import Arrow from '../../Assets/Arrow'
-import SellButton  from '../../Assets/SellButton'
-import SellButtonPlus from '../../Assets/SellButtonPlus'
 import { Link } from 'react-router-dom'
 import './Header.css'
 const Header = () => {
   return (
     <div className="headerParentDiv">
     <div className="headerChildDiv">
-      <div className="brandName">
+      <div className="brandName pl-5">
         <Link to={'/'}><OlxLogo></OlxLogo></Link>
       </div>
 

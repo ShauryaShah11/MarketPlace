@@ -3,6 +3,8 @@ import { apiConnector } from "../apiconnector1"
 import { ProductEndpoints } from "../endpoints"
 
 const { GET_PRODUCT_API,CREATE_PRODUCT_API } = ProductEndpoints
+const token = localStorage.getItem('token');
+const BearerToken = `Bearer ${token}`;
 
 export const getAllProduct = async () => {
     const toastId = toast.loading("Loading...")
@@ -22,13 +24,13 @@ export const getAllProduct = async () => {
 }
 
 // add the course details
-export const addProductDetails = async (data, token) => {
+export const addProductDetails = async (data) => {
     let result = null
     const toastId = toast.loading("Loading...")
     try {
       const response = await apiConnector("POST", CREATE_PRODUCT_API, data, {
         "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
+        Authorization: BearerToken,
       })
       console.log("CREATE PRODUCT API RESPONSE............", response)
       if (!response?.data?.success) {
