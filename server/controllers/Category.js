@@ -57,7 +57,10 @@ export const createCategory = async (req, res) => {
 // Get all categories
 export const getAllCategories = async (req, res) => {
   try {
-    const categories = await Category.find({isRemoved: false});
+    const categories = await Category.find({isRemoved: false}).populate({
+      path: 'products',
+
+  });
     return res.status(200).json({
       data: categories,
       success: true,

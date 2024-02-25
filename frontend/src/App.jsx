@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Layout from './components/Layout/Layout';
+import Layout from './Components/Layout/Layout';
 import { Toaster } from 'react-hot-toast';
 import {
   RecoilRoot,
@@ -14,7 +14,10 @@ function App() {
     <BrowserRouter>
     <RecoilRoot>
         <Routes>
-            <Route path="/*" element={<Layout />} />           
+            <Route path="/*" element={<Layout />} />     
+       
+                   
+      
         </Routes>
         <Toaster />
         </RecoilRoot>

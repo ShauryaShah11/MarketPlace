@@ -24,7 +24,7 @@ const Home = () => {
       <Banner />
       <Carousel />
       <ProductCard products={products}/>
-      {/* <Posts /> */}
+      <Footer></Footer>
     </>
   )
 }

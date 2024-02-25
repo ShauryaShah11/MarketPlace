@@ -1,6 +1,6 @@
 import Address from "../models/Address.js"; // Corrected spelling of Address
 import User from "../models/User.js";
-
+import Product from "../models/Product.js"
 export const updateUserDetail = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -49,7 +49,7 @@ export const updateDisplayPicture = async () => {
             { image: image.secure_url },
             { new: true }
         )
-        
+
         if (!updatedProfile) {
             return res.status(404).json({
                 success: false,
@@ -65,5 +65,31 @@ export const updateDisplayPicture = async () => {
         return res.status(500).json({
             error: 'Internal server error while updating picture'
         });
+    }
+}
+
+
+export const getAllCustomerWithProducts = async (req, res) => {
+    try {
+     
+        const users = await User.find({ role: 'customer' }) 
+
+        const usersWithProducts = [];
+
+        for (const user of users) {
+            const products = await Product.find({ ownerId: user._id });
+
+       
+            usersWithProducts.push({
+                user,
+                products
+            });
+        }
+
+        res.status(200).json(usersWithProducts);
+    } catch (error) {
+     
+        console.error('Error while getting all customers with products:', error);
+        res.status(500).json({ message: 'Failed to get users with products.' });
     }
 }

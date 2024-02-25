@@ -1,5 +1,5 @@
 import express from "express";
-import { addProduct, getProductById, getProducts, removeProduct, updateProduct } from "../controllers/Product.js";
+import { addProduct, getProductById, getProducts, removeProduct, updateProduct,getProductsAll } from "../controllers/Product.js";
 import { auth } from "../middlewares/auth.js";
 import { upload } from '../middlewares/multer.js';
 import { uploadFiles } from "../middlewares/upload.js";
@@ -10,6 +10,7 @@ router.post('/add', upload.array('file'), uploadFiles, addProduct);
 router.put('/update/:id', auth, upload.array('file'), uploadFiles, updateProduct);
 router.delete('/delete/:id', auth, removeProduct);
 router.get('/', getProducts);
+router.get('/Products', getProductsAll);
 router.get('/:id', getProductById);
 
 export default router;  

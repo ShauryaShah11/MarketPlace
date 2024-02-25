@@ -1,4 +1,6 @@
-/** @type {import('tailwindcss').Config} */
+/** 
+ * @type {import('tailwindcss').Config} 
+ */
 module.exports = {
   content: ["./src/**/*.{html,js,jsx}"],
   theme: {
@@ -52,9 +54,9 @@ module.exports = {
         700: "#053B48",
         800: "#022B32",
         900: "#001B1D",
-        12:"#1FA2FF",
-        13:"#12D8FA",
-        14:"#A6FFCB"
+        12: "#1FA2FF",
+        13: "#12D8FA",
+        14: "#A6FFCB"
       },
       caribbeangreen: {
         5: "#C1FFFD",
@@ -112,7 +114,7 @@ module.exports = {
         800: "#3D2A01",
         900: "#251400",
       },
-      "pure-greys": {
+      "gray": {
         5: "#F9F9F9",
         25: "#E2E2E2",
         50: "#CCCCCC",

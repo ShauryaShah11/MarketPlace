@@ -24,7 +24,7 @@ const Header = () => {
       
       <div className="language" >
       <Link to="/create">
-        <div  className=' flex ' style={{marginLeft:"170px"}}>
+        <div  className=' flex ' style={{marginLeft:"100px"}}>
 
       <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/Store-9eeae2.svg" alt="Become a Seller" class="_1XmrCc"/>
         <span className='w-48' style={{fontFamily:"cursive"}}> Become a seller</span>
@@ -55,7 +55,7 @@ const Header = () => {
       
       <Link to="/login">
     
-      <div  className=' flex m-30' style={{marginLeft:"1px"}}>
+      <div  className=' flex m-30' style={{marginLeft:"0px"}}>
 
       <img src="https://static-assets-web.flixcart.com/batman-returns/batman-returns/p/images/profile-52e0dc.svg" alt="Login" class="-dOa_b L_FVxe" width="24" height="24"/>
        <span className='w-48' style={{fontFamily:"cursive"}} > Login</span>
