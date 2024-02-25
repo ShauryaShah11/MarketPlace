@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
-import { handleAllCustomer } from '../../Services/Admin';
+import { handleAllCustomer } from '../../services/Admin';
 import CategoryDeatils from './CategoryDeatils';
 import CustomerDetails from './CustomerDetails';
 const mainColors = [

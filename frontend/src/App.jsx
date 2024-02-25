@@ -1,26 +1,23 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import './App.css';
-import Layout from './Components/Layout/Layout';
-import { Toaster } from 'react-hot-toast';
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import "./App.css";
+import Layout from "./components/Layout/Layout";
+import { Toaster } from "react-hot-toast";
 import {
   RecoilRoot,
   atom,
   selector,
   useRecoilState,
   useRecoilValue,
-} from 'recoil';
+} from "recoil";
 function App() {
   return (
     <BrowserRouter>
-    <RecoilRoot>
+      <RecoilRoot>
         <Routes>
-            <Route path="/*" element={<Layout />} />     
-       
-                   
-      
+          <Route path="/*" element={<Layout />} />
         </Routes>
         <Toaster />
-        </RecoilRoot>
+      </RecoilRoot>
     </BrowserRouter>
   );
 }

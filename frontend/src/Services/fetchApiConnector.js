@@ -7,7 +7,6 @@ export const apiConnector = async (method, url, bodyData, headers, params) => {
             params: params || null,
         });
         const data = await response?.json();
-        console.log(response)
         if (!response.ok) {
             console.error('API request failed:', data.error);
             throw new Error(data.error); // You can throw the error if needed for further handling
