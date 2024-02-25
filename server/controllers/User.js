@@ -93,3 +93,13 @@ export const getAllCustomerWithProducts = async (req, res) => {
         res.status(500).json({ message: 'Failed to get users with products.' });
     }
 }
+
+export const getCurrentUser = async (req, res) => {
+    try{
+
+    }
+    catch(error){
+        console.error(error);
+        res.status(500).json({ message: 'Failed to get users with products.' });
+    }
+}

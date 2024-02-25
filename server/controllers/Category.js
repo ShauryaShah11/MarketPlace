@@ -14,6 +14,14 @@ const IdSchema = z.string().refine((val) => {
   message: 'Invalid Id format',
 });
 
+const validateId = (Id) => {
+  const validationResult = IdSchema.safeParse(Id);
+  return validationResult.success ? null : {
+    error: 'Invalid id format',
+    details: validationResult.error.errors,
+  };
+};  
+
 export const createCategory = async (req, res) => {
   const { name, description} = req.body;
   const tax = parseFloat(req.body.tax);
@@ -82,7 +90,7 @@ export const updateCategoryById = async (req, res) => {
   const tax = parseFloat(req.body.tax);
 
   try {
-    const validationIdError = validateCourseId(categoryId);
+    const validationIdError = validateId(categoryId);
     if (validationIdError) {
        return res.status(400).json(validationIdError);
     }
@@ -127,7 +135,7 @@ export const deleteCategoryById = async (req, res) => {
   const categoryId = req.params.id;
 
   try {
-    const validationIdError = validateCourseId(categoryId);
+    const validationIdError = validateId(categoryId);
     if (validationIdError) {
        return res.status(400).json(validationIdError);
     }
@@ -157,7 +165,7 @@ export const deleteCategoryById = async (req, res) => {
 export const getProductByCategoryId = async (req, res) => {
   try {
     const categoryId = req.params.id;
-    const validationIdError = validateCourseId(categoryId);
+    const validationIdError = validateId(categoryId);
     if (validationIdError) {
        return res.status(400).json(validationIdError);
     }

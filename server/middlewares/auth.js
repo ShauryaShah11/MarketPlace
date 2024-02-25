@@ -6,48 +6,33 @@ dotenv.config();
 
 //auth
 export const auth = async (req, res, next) => {
-    try {
-        //extract token
-        const token = req.cookies.token
-            || req.body.token
-            || req.header("Authorization").replace("Bearer ", "");
+    const token = req.header("Authorization");
 
-        console.log("token--------------- : ", token)
-        //if token missing, then return response
-        if (!token) {
-            return res.status(401).json({
-                success: false,
-                message: 'TOken is missing',
-            });
-        }
+  if (!token) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Access denied. No token provided." });
+  }
 
-        //verify the token
-        try {
-            const decode = jwt.verify(token, process.env.JWT_SECRET);
-            //now check that user present in db or not
-            const user =await User.findById(decode.id);
-            if (!user)
-                return res.status(500).json({
-                    success: false,
-                    message: "invalid user ! try to  login again"
-                })
-            req.user = user;
-        }
-        catch (err) {
-            //verification - issue
-            return res.status(401).json({
-                success: false,
-                message: 'token is invalid',
-            });
-        }
-        next();
+  try {
+    const decoded = jwt.verify(token.replace("Bearer ", ""), process.env.JWT_SECRET);
+    const expirationTime = new Date(decoded.expiresIn * 1000);
+
+    if (expirationTime <= new Date()) {
+      res.status(401).json({ success: false, message: "Token has expired." });
+    } else {
+      const user = await User.findById(decoded.id);
+      req.user = user; // Now you have access to the user data, including user ID
+      next();
     }
-    catch (error) {
-        return res.status(401).json({
-            success: false,
-            message: `Something went wrong while validating the token ${error.message}`,
-        });
+  } catch (err) {
+    if (err instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ success: false, message: "Token has expired." });
+    } else {
+      console.error(err);
+      res.status(400).json({ success: false, message: "Invalid token." });
     }
+  }
 }
 
 //isAdmin
