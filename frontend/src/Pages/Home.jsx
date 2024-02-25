@@ -20,12 +20,11 @@ const Home = () => {
     fetchProductsData();
   }, []);
   return (
-    <>
-    <Header></Header>
-      <Banner />
-      <Carousel />
+    <div className="px-4 sm:px-6 lg:px-8 py-0">
+      <Banner className="mb-6" />
+      <Carousel className="mb-6" />
       <ProductCard products={products} />
-    </>
+    </div>
   );
 };
 export default Home;

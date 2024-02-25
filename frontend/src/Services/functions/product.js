@@ -57,3 +57,14 @@ export const getProductDataById = async (id) => {
     toast.error(error.message);
   }
 }
+
+export const getProductByCategoryId = async (id) => {
+  try{  
+    const response = await apiConnector("GET", `${API_URL}/categories/products/${id}`);
+    return response.data.data;
+  }
+  catch(error){
+    console.error("GET_PRODUCT_BY_ID_API API ERROR............", error);
+    toast.error(error.message);
+  }
+}

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Category from '../models/Category.js'; 
 import Product from '../models/Product.js';
 import { z } from "zod";

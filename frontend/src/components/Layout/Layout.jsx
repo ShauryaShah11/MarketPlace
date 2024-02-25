@@ -10,19 +10,23 @@ import Category from "../Admin/Category";
 import AddCategoryForm from "../Admin/AddCat";
 import Logout from "../Admin/Logout";
 import RenderSteps from "../AddProduct/RenderSteps";
+import CreateProduct from "../../Pages/CreateProduct";
+import ProductCategory from "../../Pages/ProductCategory";
+
 function Layout() {
   return (
-    <div>
-     
-      <div className="container mx-auto">
+    <div className="flex flex-col min-h-screen">
+      <Header className="w-full" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
 
           <Route path="/login" element={<Login />}></Route>
           <Route path="/register" element={<Register />}></Route>
           <Route path="/product/:id" element={<ProductDetail />}></Route>
-          <Route path="/post-product" element={<RenderSteps />}></Route>
+          <Route path="/categories/:id" element={<ProductCategory />}></Route>
 
+          <Route path="/post-product" element={<CreateProduct />}></Route>
 
           <Route path="/Admin/Customer" element={<Customer></Customer>}></Route>
           <Route
@@ -34,7 +38,7 @@ function Layout() {
           <Route path="/Admin/logout" element={<Logout></Logout>}></Route>
         </Routes>
       </div>
-      {/* <Footer /> */}
+      <Footer className="w-full" />
     </div>
   );
 }

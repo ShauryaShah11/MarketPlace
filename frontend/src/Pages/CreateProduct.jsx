@@ -1,4 +1,4 @@
-import RenderSteps from "../components/AddProduct/RenderSteps"
+import RenderSteps from "../Components/AddProduct/RenderSteps"
 
 export default function CreateProduct() {
   return (
