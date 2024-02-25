@@ -10,9 +10,9 @@ import {
   Autoplay,
 } from "swiper/modules";
 import { IoShareSocialOutline } from "react-icons/io5";
-import { BookProduct } from "../services/functions/payment";
+import { BookProduct } from "../Services/functions/payment";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
-import { getProductDataById } from "../services/functions/product";
+import { getProductDataById } from "../Services/functions/product";
 // import frame from '../assets/frame.png'
 function ProductDetail() {
 

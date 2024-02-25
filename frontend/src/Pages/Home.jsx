@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header/Header";
-import Banner from "../components/Banner/Banner";
+import Header from "../Components/Header/Header";
+import Banner from "../Components/Banner/Banner";
 import Carousel from "./Carousel";
-import ProductCard from "../components/ProdcutCard";
-import { fetchProducts } from "../services/apiService.js";
+import ProductCard from "../Components/ProdcutCard";
+import { fetchProducts } from "../Services/apiService.js";
 import { useRecoilState } from "recoil";
 
 const Home = () => {
@@ -21,6 +21,7 @@ const Home = () => {
   }, []);
   return (
     <>
+    <Header></Header>
       <Banner />
       <Carousel />
       <ProductCard products={products} />

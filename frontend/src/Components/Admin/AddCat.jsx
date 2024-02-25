@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {handleadd} from './../../services/Admin'
+import {handleadd} from './../../Services/Admin'
 import Swal from 'sweetalert2';
 const CategoryForm = () => {
     const [formData, setFormData] = useState({

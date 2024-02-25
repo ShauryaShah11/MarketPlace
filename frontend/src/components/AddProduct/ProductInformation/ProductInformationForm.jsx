@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { addProductDetails } from "../../../services/functions/product";
+import { addProductDetails } from "../../../Services/functions/product";
 import Loader from "../../Loader";
 import { useRecoilState } from "recoil";
 import { productCategoriesAtom } from "../../../store/productCategory";
-import { fetchCategories } from "../../../services/apiService";
+import { fetchCategories } from "../../../Services/apiService";
 
 function ProductInformationForm(){
   const [formData, setFormData] = useState({

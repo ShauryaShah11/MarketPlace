@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Banner.css";
 import { Link } from "react-router-dom";
-import { fetchCategories } from "../../services/apiService";
+import { fetchCategories } from "../../Services/apiService";
 import { productCategoriesAtom } from "../../store/productCategory";
 import { useRecoilState } from "recoil";
 

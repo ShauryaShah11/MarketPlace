@@ -13,7 +13,7 @@ import RenderSteps from "../AddProduct/RenderSteps";
 function Layout() {
   return (
     <div>
-      <Header />
+     
       <div className="container mx-auto">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -34,7 +34,7 @@ function Layout() {
           <Route path="/Admin/logout" element={<Logout></Logout>}></Route>
         </Routes>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
