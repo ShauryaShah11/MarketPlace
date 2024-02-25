@@ -5,6 +5,7 @@ import ProductDetail from "../../Pages/Carousel";
 import Register from "../../Pages/Register";
 import Home from "../../Pages/Home";
 import Footer from "../Footer/Footer"
+import CreateProduct from "../../Pages/CreateProduct";
 function Layout(){
     return (
         <div>
@@ -15,6 +16,7 @@ function Layout(){
                     <Route path='/login' element={<Login />}></Route>
                     <Route path='/Register' element={<Register />}></Route>
                     <Route path='/ProductDetails' element={<ProductDetail />}></Route>
+                    <Route path='/CreateProduct' element={<CreateProduct />}></Route>
                 </Routes>
             </div>
             <Footer />

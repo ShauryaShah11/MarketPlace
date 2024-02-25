@@ -35,6 +35,9 @@ const productSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     } ,
+    tags: {
+        type: [String],
+    },
     postingDate:{
         type:Date,
         default:Date.now

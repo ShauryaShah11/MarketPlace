@@ -25,7 +25,7 @@ export const auth = async (req, res, next) => {
         try {
             const decode = jwt.verify(token, process.env.JWT_SECRET);
             //now check that user present in db or not
-            const user = User.findById(decode.id);
+            const user =await User.findById(decode.id);
             if (!user)
                 return res.status(500).json({
                     success: false,

@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"
 import User from "../models/User.js"
 import OTP from "../models/OTP.js"
 import otpGenerator from "otp-generator"
@@ -7,7 +7,9 @@ import jwt from "jsonwebtoken"
 import { passwordUpdated } from "../templates/passwordUpdate.js"
 import { mobileOtpSend } from "../utils/mobileOtpSend.js";
 import { verifyOtp } from "../utils/mobileOtpSend.js";
+// import {verifyOtp}  from "../utils/mobileOtp.js";
 
+// Signup Controller for Registering User
 export const signupMobile = async (req, res) => {
 
 	try {
@@ -58,7 +60,7 @@ export const signupMobile = async (req, res) => {
 			});
 		}
 		//hasing the password
-		// const hashedPassword = await bcrypt.hash(password, 10);
+		const hashedPassword = await bcrypt.hash(password, 10);
 		// console.log("here working")
 
 
@@ -91,14 +93,12 @@ export const signupMobile = async (req, res) => {
 export const signupWithemail = async (req, res) => {
 	try {
 		// Destructure fields from the request body
-		console.log(req.body)
 		const {
 			name,
 			email,
 			password,
 			confirmPassword,
 			role,
-			mobileNo,
 			otp,
 		} = req.body;
 		// Check if All Details are there or not
@@ -108,7 +108,6 @@ export const signupWithemail = async (req, res) => {
 			!password ||
 			!confirmPassword ||
 			!otp
-
 		) {
 			return res.status(403).send({
 				success: false,
@@ -152,18 +151,14 @@ export const signupWithemail = async (req, res) => {
 
 		// Hash the password
 		const hashedPassword = await bcrypt.hash(password, 10);
-		console.log(hashedPassword);
 
-		// Create the user
-		let approved = "";
-		approved === "Instructor" ? (approved = false) : (approved = true);
+
 
 
 		const user = await User.create({
 			name,
 			role,
 			email,
-			mobileNo,
 			password: hashedPassword,
 			role: role,
 			image: `https://api.dicebear.com/5.x/initials/svg?seed=${name}`,
@@ -179,13 +174,11 @@ export const signupWithemail = async (req, res) => {
 		return res.status(500).json({
 			success: false,
 			message: "User cannot be registered. Please try again.",
-
 		});
 	}
 };
 
 
-// Login controller for authenticating users
 // Login controller for authenticating users
 export const login = async (req, res) => {
 	try {
@@ -197,7 +190,7 @@ export const login = async (req, res) => {
 			// Return 400 Bad Request status code with error message
 			return res.status(400).json({
 				success: false,
-				message: "Please Fill up All the Required Fields",
+				message: `Please Fill up All the Required Fields`,
 			});
 		}
 		console.log(email)
@@ -214,13 +207,13 @@ export const login = async (req, res) => {
 				// Return 401 Unauthorized status code with error message
 				return res.status(401).json({
 					success: false,
-					message: "User is not Registered with Us Please SignUp to Continue",
+					message: `User is not Registered with Us Please SignUp to Continue`,
 				});
 			}
 			
 			// Generate JWT token and Compare Password
 			if (await bcrypt.compare(password, user.password)) {
-				// console.log(user)
+				console.log(user)
 				const token = jwt.sign(
 				{ mobileNo: user.mobileNo, id: user._id, role: user.role },
 				process.env.JWT_SECRET,
@@ -242,13 +235,12 @@ export const login = async (req, res) => {
 				success: true,
 				token,
 				user,
-				message: "User Login Success",
+				message: `User Login Success`,
 			});
 		} else {
-			// console.log(error)
 			return res.status(401).json({
 				success: false,
-				message: "Password is incorrect",
+				message: `Password is incorrect`,
 			});
 		}
 	} catch (error) {
@@ -256,7 +248,7 @@ export const login = async (req, res) => {
 		// Return 500 Internal Server Error status code with error message
 		return res.status(500).json({
 			success: false,
-			message: "Login Failure Please Try Again",
+			message: `Login Failure Please Try Again`,
 		});
 	}
 };
@@ -288,7 +280,7 @@ export const sendotpMobile = async (req, res) => {
 			if (error.status == 429) {
 				return res.status(428).json({ status: false, message: "max attepemt reach" })
 			}
-			console.log("eee", error)
+			console.log("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", error)
 			return res.status(300).json({ status: false })
 		}
 
@@ -317,7 +309,8 @@ export const sendotpEmail = async (req, res) => {
 	try {
 		const { email } = req.body;
 
-
+		// Check if user is already present
+		// Find user with provided email
 		const checkUserPresent = await User.findOne({ email });
 		// to be used in case of signup
 
