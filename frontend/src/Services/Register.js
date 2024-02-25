@@ -26,9 +26,10 @@ export const handlesignupwithemail =async(inf) =>{
     return data;
 }
 export const handleloginwithemail =async(inf) =>{
-    const data = await Axios.post(`${url}/api/auth/login/`, inf).then((response) => {
-        return response.data;
-    });
+    const data = await Axios.post(`${url}/api/auth/login/`, inf);
+  
 
-    return data;
+    return data.data;
+
+
 }

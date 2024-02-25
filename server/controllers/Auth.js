@@ -205,7 +205,7 @@ export const login = async (req, res) => {
 			// If user not found with provided mobileNo
 			if (!user) {
 				// Return 401 Unauthorized status code with error message
-				return res.status(401).json({
+				return res.json({
 					success: false,
 					message: `User is not Registered with Us Please SignUp to Continue`,
 				});
@@ -238,10 +238,7 @@ export const login = async (req, res) => {
 				message: `User Login Success`,
 			});
 		} else {
-			return res.status(401).json({
-				success: false,
-				message: `Password is incorrect`,
-			});
+		
 		}
 	} catch (error) {
 		console.error(error);

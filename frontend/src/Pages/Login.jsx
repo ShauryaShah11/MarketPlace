@@ -16,19 +16,20 @@ export default function Login() {
         password: password
       }; // Create data object with email field
       const order = await handleloginwithemail(data);
-      if (order) {
+     
+      if (order.success) {
         Swal.fire({
           title: "Login Successfully",
 
           icon: "success"
         }).then(() => {
-          localStorage.setItem("user", order.user)
+          localStorage.setItem("token", order.user.token)
           window.location.href = "/"
         })
       }
       else {
         Swal.fire({
-          title: "The Internet?",
+          title: "Somethig went wrong",
           text: "That thing is still around?",
           icon: "question"
         });
