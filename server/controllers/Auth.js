@@ -213,7 +213,6 @@ export const login = async (req, res) => {
 			
 			// Generate JWT token and Compare Password
 			if (await bcrypt.compare(password, user.password)) {
-				console.log(user)
 				const token = jwt.sign(
 				{ mobileNo: user.mobileNo, id: user._id, role: user.role },
 				process.env.JWT_SECRET,

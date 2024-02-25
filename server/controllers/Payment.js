@@ -15,6 +15,7 @@ const checkout = async (req, res)  =>{
             order
         });
     } catch (error) {
+        console.log(error);
         res.status(500).json({ error: 'Error creating order' });
     }
 }
@@ -26,7 +27,7 @@ const paymentVerification = async (req, res) => {
           razorpay_payment_id,
           razorpay_signature,
         } = req.body;
-        
+        console.log(req.body);
         const productId = req.body.productId;
         const product = await Product.findById(productId);
         if(!product){
@@ -43,20 +44,19 @@ const paymentVerification = async (req, res) => {
           .digest("hex");
     
         const isAuthentic = expectedSignature === razorpay_signature;
+        console.log(isAuthentic);
         if (isAuthentic) {
           const payment = await Payment.create({
             razorpay_order_id,
             razorpay_payment_id,
             razorpay_signature,
             user: req.user._id,
-            product: productId,
+            Product: productId,
             paymentStatus: "completed",
             paymentDate: new Date(),
           })
-          
           product.isSold = true;
           await product.save();
-    
           res.json({
             success: true,
             paymentId: payment._id,

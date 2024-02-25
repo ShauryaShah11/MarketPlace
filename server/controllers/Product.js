@@ -21,7 +21,15 @@ const IdSchema = z.string().refine((val) => {
     return mongoose.Types.ObjectId.isValid(val);
   }, {
     message: 'Invalid Id format',
-});
+  });
+  
+  const validateId = (Id) => {
+    const validationResult = IdSchema.safeParse(Id);
+    return validationResult.success ? null : {
+      error: 'Invalid id format',
+      details: validationResult.error.errors,
+    };
+  };  
    
 const taxCalculation = (price, tax) => {
     return price * tax / 100;
@@ -67,12 +75,14 @@ export const addProduct = async (req, res) => {
             }
         })
         return res.status(201).json({
+            success: true,
             message: 'Product added successfully'
         });
     }
     catch(error){
         console.error(error);
         return res.status(500).json({
+            success: false,
             error: 'Internal server error'
         })
     }
@@ -81,9 +91,9 @@ export const addProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     try{
         const id = req.params.id;
-        const validationIdError = validateCourseId(id);
+        const validationIdError = validateId(id);
         if (validationIdError) {
-        return res.status(400).json(validationIdError);
+            return res.status(400).json(validationIdError);
         }
         const {name, brand, price, description, categoryId, whyToSale, ownerCount} = req.body;
         const product = await Product.findById(id);
@@ -112,7 +122,7 @@ export const updateProduct = async (req, res) => {
             images,
             postingDate: Date.now()
         })
-        const validateProduct = productSchema.safeParse(newProduct);
+        const validateProduct = productSchema.safeParse(updatedProduct);
         if(!validateProduct.success){
             return res.status(400).json({
                 error: 'Invalid product format',
@@ -133,6 +143,7 @@ export const updateProduct = async (req, res) => {
             }
         })
         return res.status(201).json({
+            success: true,
             message: 'Product updated successfully'
         });
     }
@@ -147,9 +158,9 @@ export const updateProduct = async (req, res) => {
 export const removeProduct = async (req, res) => {
     try{
         const id = req.params.id;
-        const validationIdError = validateCourseId(id);
+        const validationIdError = validateId(id);
         if (validationIdError) {
-        return res.status(400).json(validationIdError);
+            return res.status(400).json(validationIdError);
         }
         const product = await Product.findById(id);
 
@@ -161,6 +172,7 @@ export const removeProduct = async (req, res) => {
         await Product.findByIdAndUpdate(product._id, {isRemoved: true});
 
         return res.status(200).json({
+            success: true,
             message: 'Product removed successfully'
         });
     }
@@ -174,8 +186,7 @@ export const removeProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
     try{
-        const products = await Product.find({ isRemoved: false })
-       
+        const products = await Product.find({ isRemoved: false })      
 
         return res.status(200).json(products);
     }
@@ -208,11 +219,11 @@ export const getProductsAll = async (req, res) => {
 export const getProductById = async (req, res) => {
     try{
         const id = req.params.id;
-        const validationIdError = validateCourseId(id);
+        const validationIdError = validateId(id);
         if (validationIdError) {
-        return res.status(400).json(validationIdError);
+            return res.status(400).json(validationIdError);
         }
-        const product = await Product.findById(id);
+        const product = await Product.findById(id).populate('ownerId');
         if(!product){
             return res.status(404).json({
                 error: 'Product not found'
