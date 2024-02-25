@@ -172,7 +172,27 @@ export const removeProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
     try{
-        const products = await Product.find({isRemoved: false});
+        const products = await Product.find({ isRemoved: false })
+       
+
+        return res.status(200).json(products);
+    }
+    catch(error){
+        console.error(error);
+        return res.status(500).json({
+            error: 'Internal server error'
+        })
+    }
+}
+export const getProductsAll = async (req, res) => {
+    try{
+        const products = await Product.find({ isRemoved: false })
+        .populate({
+            path: 'ownerId',
+     
+        })
+        .populate('category');
+
         return res.status(200).json(products);
     }
     catch(error){

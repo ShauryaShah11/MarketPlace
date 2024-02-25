@@ -1,9 +1,9 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import Register from "./Assets/picture/register.jpg";
-import {handleotpwithemail} from './Services/Register'
-import {handlesignupwithemail} from './Services/Register'
+import Register from "../Assets/picture/register.jpg";
+import {handleotpwithemail} from '../Services/Register'
+import {handlesignupwithemail} from '../Services/Register'
 import Swal from 'sweetalert2';
 export default function Login() {
     const [name, setname] = useState('');
