@@ -29,7 +29,7 @@ const taxCalculation = (price, tax) => {
 
 export const addProduct = async (req, res) => {
     try{
-        const {name, brand, price, description, categoryId, whyToSale, ownerCount} = req.body;
+        const {name, brand, price, description, categoryId, whyToSale,tags, ownerCount} = req.body;
         const category = await Category.findById(categoryId);
         if(!category){
             return res.status(404).json({
@@ -38,16 +38,17 @@ export const addProduct = async (req, res) => {
         }
         const tax = taxCalculation(price, category.tax);
         const images = req.fileUrls;
-
         const newProduct = new Product({
             name,
             brand, 
             price,
             description,
             tax,
-            category,
+            tags,
+            category:categoryId,
             whyToSale,
             ownerCount,
+            ownerId:req.user.id,
             images: images,
             postingDate: Date.now()
         })
@@ -55,7 +56,7 @@ export const addProduct = async (req, res) => {
         if(!validateProduct.success){
             return res.status(400).json({
                 error: 'Invalid product format',
-                details: validateCourse.error.errors
+                details: validateProduct.error.errors
             })
         }
         const savedProduct = await newProduct.save();
