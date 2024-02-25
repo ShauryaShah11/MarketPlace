@@ -1,7 +1,7 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
 import { useState } from "react";
-import {handleloginwithemail} from './Services/Register'
+// import {handleloginwithemail} from './Services/Register'
 import Swal from 'sweetalert2';
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function Login() {
       const data = { email: email,
                  password:password
       }; // Create data object with email field
-  const order = await handleloginwithemail(data);
+  const order = "await handleloginwithemail(data)";
       if(order){
           Swal.fire({
               title: "Login Successfully",

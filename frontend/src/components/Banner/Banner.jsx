@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Banner.css";
-import { fetchCategories } from "../../services/apiService";
 import { Link } from "react-router-dom";
+import { fetchCategories } from "../../Services/apiService";
 
 function Banner() {
   const [categories, setCategories] = useState(null);

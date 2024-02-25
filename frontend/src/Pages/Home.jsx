@@ -4,7 +4,7 @@ import Banner from '../components/Banner/Banner'
 // import Posts from './Posts/Posts'
 import Carousel from './Carousel'
 import ProductCard from '../components/ProdcutCard'
-import { fetchProducts } from '../services/apiService'
+import { fetchProducts } from '../Services/apiService'
 
 const Home = () => {
   const [products, setProducts] = useState(null);

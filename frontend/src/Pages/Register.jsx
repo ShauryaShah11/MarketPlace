@@ -1,9 +1,9 @@
 import { SiFraunhofergesellschaft } from "react-icons/si";
 import { FaGoogle } from "react-icons/fa";
 import { useEffect, useState } from "react";
-import Register from "./Assets/picture/register.jpg";
-import {handleotpwithemail} from './Services/Register'
-import {handlesignupwithemail} from './Services/Register'
+import Register from "../Assets/picture/register.jpg";
+// import {handleotpwithemail} from './Services/Register'
+// import {handlesignupwithemail} from './Services/Register'
 import Swal from 'sweetalert2';
 export default function Login() {
     const [name, setname] = useState('');
@@ -45,7 +45,7 @@ export default function Login() {
         try {
            
             const data = { email: email }; // Create data object with email field
-        const order = await handleotpwithemail(data);
+        const order = "await handleotpwithemail(data)";
             if(order){
                 Swal.fire({
                     title: "OTP Sended Successfully",
@@ -78,7 +78,7 @@ export default function Login() {
         
         try {
            
-            const user = await handlesignupwithemail(inf);
+            const user = "await handlesignupwithemail(inf)";
             if(user){
                 Swal.fire({
                     title: "Signup successfully",
