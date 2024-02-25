@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast"
-import { apiConnector } from "./apiConnector";
+import { apiConnector } from "./fetchApiConnector";
 
 const API_URL = process.env.REACT_APP_API_URL;
 

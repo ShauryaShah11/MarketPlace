@@ -1,7 +1,7 @@
 // import React from 'react'
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
-import { handleAllCategory } from '../../Services/Admin';
+import { handleAllCategory } from '../../services/Admin';
 import CustomerDetails from './CustomerDetails';
 import AddCat from './AddCat';
 const mainColors = [
