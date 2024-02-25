@@ -14,7 +14,7 @@ const paymentSchema = new mongoose.Schema({
       required: true,
   },
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, 
-  Prodcut: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true }, 
+  Product: { type: mongoose.Schema.Types.ObjectId, ref: 'Product', required: true }, 
   paymentStatus: {
     type: String,
     enum: ['completed', 'pending', 'failed'],
