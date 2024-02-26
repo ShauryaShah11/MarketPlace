@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/swiper-bundle.css";
+import { Link } from 'react-router-dom';
 import {
   Navigation,
   Pagination,
@@ -13,6 +14,8 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { BookProduct } from "../Services/functions/payment";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProductDataById } from "../Services/functions/product";
+import Header from "../Components/Header/Header";
+import Footer from "../Components/Footer/Footer";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -47,8 +50,12 @@ function ProductDetail() {
   const handlePayment = async () => {
     await BookProduct(product.price, navigate, id);
   };
-
+ 
+  
   return (
+    <>
+    
+    <Header/>
     <div className="container mx-auto p-4 bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen">
       <div className="mt-12 grid md:grid-cols-2 gap-8">
         {/* Left side for images */}
@@ -115,17 +122,30 @@ function ProductDetail() {
                 {product?.ownerId?.name}
               </p>
               <p className="text-gray-600">Ask a question to the owner</p>
+            <Link to ="http://localhost:3001/">
+            <button
+              className="px-6 py-3 bg-pink-500 text-white font-semibold rounded-full border border-pink-600 hover:bg-black-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
+            
+              style={{marginTop:"10px"}}
+            >
+              Chat with user
+            </button>
+            </Link>
             </div>
+          </div>
             <button
               className="px-6 py-3 bg-purple-500 text-white font-semibold rounded-full border border-purple-600 hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"
               onClick={handlePayment}
+              style={{marginBottom:"10px",marginTop:"10px"}}
             >
               Book Product
             </button>
-          </div>
+            
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

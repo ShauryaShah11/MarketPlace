@@ -65,6 +65,7 @@ function ProductCard({products}){
               nextLinkClassName={"px-3 py-1 rounded-md hover:bg-gray-200"}
             />
           </div>
+          {/* <button style={{backgroundColor:"red"}}>hello</button> */}
         </div>
       );
 

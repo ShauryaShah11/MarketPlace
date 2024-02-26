@@ -5,6 +5,7 @@ import Carousel from "./Carousel";
 import ProductCard from "../Components/ProdcutCard";
 import { fetchProducts } from "../Services/apiService.js";
 import { useRecoilState } from "recoil";
+import Footer from "../Components/Footer/Footer.jsx";
 
 const Home = () => {
   const [products, setProducts] = useState(null);
@@ -20,11 +21,15 @@ const Home = () => {
     fetchProductsData();
   }, []);
   return (
-    <div className="px-4 sm:px-6 lg:px-8 py-0">
+    <>
+      <Header></Header>
+  
       <Banner className="mb-6" />
       <Carousel className="mb-6" />
       <ProductCard products={products} />
-    </div>
+      <Footer/>
+    {/* </div> */}
+    </>
   );
 };
 export default Home;

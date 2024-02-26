@@ -12,11 +12,12 @@ import Logout from "../Admin/Logout";
 import RenderSteps from "../AddProduct/RenderSteps";
 import CreateProduct from "../../Pages/CreateProduct";
 import ProductCategory from "../../Pages/ProductCategory";
+import Chats from "../Chats/Chats";
 
 function Layout() {
   return (
     <div className="flex flex-col min-h-screen">
-      <Header className="w-full" />
+      {/* <Header className="w-full" /> */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -27,7 +28,6 @@ function Layout() {
           <Route path="/categories/:id" element={<ProductCategory />}></Route>
 
           <Route path="/post-product" element={<CreateProduct />}></Route>
-
           <Route path="/Admin/Customer" element={<Customer></Customer>}></Route>
           <Route
             path="/Admin/AddCat"
@@ -36,9 +36,13 @@ function Layout() {
 
           <Route path="/Admin/Category" element={<Category></Category>}></Route>
           <Route path="/Admin/logout" element={<Logout></Logout>}></Route>
+          <Route path="/Chats" element={<Chats></Chats>}></Route>
+
+         
         </Routes>
       </div>
-      <Footer className="w-full" />
+      {/* <Footer className="w-full" /> */}
+      
     </div>
   );
 }
